@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 40px;
+    }
+
+    /* Menu Toggle Button (Hidden on Desktop) */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+      background: none;
+      border: none;
+      padding: 5px;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background-color: #333;
+      border-radius: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      margin-right: 15px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .nav-links a.active {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 5px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* RESPONSIVE NAVBAR LOGIC */
+    @media (max-width: 900px) {
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: white;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+        z-index: 100;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 15px 20px;
+        margin: 0;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      
+      .nav-links a.active {
+        border-bottom: 1px solid #f0f0f0;
+        color: #2563eb;
+      }
+    }
+
+    /* MAIN CONTENT */
+    .container {
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    /* CARDS */
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    select,
+    input {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+    }
+
+    .timeline-empty {
+      text-align: center;
+      color: #888;
+      padding: 30px;
+    }
+
+    /* CALENDAR */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-top: 15px;
+      border-top: 1px solid #ddd;
+      overflow-x: auto;
+    }
+
+    .day {
+      border-right: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      min-height: 90px;
+      padding: 5px;
+      font-size: 12px;
+    }
+
+    .day-header {
+      font-weight: bold;
+      background: #f9fafb;
+      text-align: center;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .event {
+      margin-top: 5px;
+      font-size: 11px;
+    }
+
+    .event a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .event a:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      padding: 8px 12px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+    <div class="nav-left">
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" class="logo" />
+      
+      <div class="nav-links" id="navLinks">
+        <a href="#">Home</a>
+        <a class="active" href="#">Dashboard</a>
+        <a href="#">My courses</a>
+        <a href="#">Courses ▼</a>
+        <a href="#">Android Mobile App</a>
+        <a href="#">iOS Mobile App</a>
+        <a href="#">Main Website</a>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <span>🔔</span>
+      <span>💬</span>
+      <div class="circle">EG</div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <h1>Welcome back, Emmanuel! 👋</h1>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <select>
+            <option>Next 7 days</option>
+          </select>
+          <select>
+            <option>Sort by dates</option>
+          </select>
+        </div>
+
+        <input type="text" placeholder="Search by activity type or name" />
+      </div>
+
+      <div class="timeline-empty">
+        📄<br />
+        No activities require action
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="calendar-header">
+        <div>
+          <select>
+            <option>All courses</option>
+          </select>
+        </div>
+
+        <button onclick="addEvent()">New event</button>
+      </div>
+
+      <h3 style="text-align:center;">March 2026</h3>
+
+      <div class="calendar-grid">
+        <div class="day-header">Mon</div>
+        <div class="day-header">Tue</div>
+        <div class="day-header">Wed</div>
+        <div class="day-header">Thu</div>
+        <div class="day-header">Fri</div>
+        <div class="day-header">Sat</div>
+        <div class="day-header">Sun</div>
+
+        <script>
+          for (let i = 1; i <= 31; i++) {
+            // Updated logic to wrap "Examination" in an <a> tag
+            document.write(`<div class="day" id="day-${i}">
+              <div>${i}</div>
+              ${i === 1 ? '<div class="event"><a href="QuizAT.html">Examination</a></div>' : ''}
+            </div>`);
+          }
+        </script>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("navLinks");
+      nav.classList.toggle("show");
+    }
+
+    function addEvent() {
+      const day = prompt("Enter day (1-31):");
+      const text = prompt("Enter event name:");
+
+      if (day && text) {
+        const el = document.getElementById("day-" + day);
+        if (el) {
+          const event = document.createElement("div");
+          event.className = "event";
+          // Check if the manual entry is an examination to make it clickable too
+          if (text.toLowerCase() === "examination") {
+            event.innerHTML = `<a href="QuizAT.html">${text}</a>`;
+          } else {
+            event.innerText = text;
+          }
+          el.appendChild(event);
+        } else {
+          alert("Invalid day");
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>

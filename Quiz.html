@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Quiz - CSC413</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --success: #059669;
+      --danger: #ef4444;
+      --bg: #f3f4f6;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .header {
+      background: white;
+      padding: 15px 30px;
+      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+      color: #1e3a8a;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .main-layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* Quiz Area */
+    .quiz-container {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .question-card {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 40px;
+      transition: transform 0.2s;
+    }
+
+    .question-card:target {
+      border: 2px solid var(--primary);
+      background: #f0f7ff;
+    }
+
+    .question-text { font-weight: 600; font-size: 1.1em; margin-bottom: 20px; display: block; }
+
+    /* Tree Drag & Drop */
+    .tree-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      background: #fafafa;
+      border-radius: 10px;
+    }
+    .tree-root {
+      padding: 10px 20px;
+      background: #333;
+      color: white;
+      border-radius: 5px;
+    }
+    .tree-branches { display: flex; gap: 50px; position: relative; }
+    .branch {
+      border: 2px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+      width: 160px;
+      min-height: 100px;
+      text-align: center;
+    }
+    .branch-label { font-weight: bold; margin-bottom: 10px; display: block; color: #555; }
+    
+    .items-bank { display: flex; gap: 10px; margin-top: 20px; }
+    .drag-item {
+      padding: 8px 12px;
+      background: var(--primary);
+      color: white;
+      border-radius: 4px;
+      cursor: grab;
+      font-size: 13px;
+    }
+
+    /* Navigation */
+    .sidebar {
+      width: 300px;
+      background: white;
+      border-left: 1px solid #ddd;
+      padding: 25px;
+    }
+    .quiz-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .nav-box {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--danger);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .nav-box.answered { background: var(--primary); }
+
+    .nav-buttons { display: flex; gap: 15px; padding-bottom: 50px; }
+    .btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .btn-blue { background: var(--primary); color: white; }
+    
+    /* Confirmation Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 400px;
+      text-align: center;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <span>CSC413: Computer Science Assessment</span>
+    <span>Time Remaining: 45:00</span>
+  </div>
+
+  <div class="main-layout">
+    <div class="quiz-container" id="quizBody">
+      
+      <div id="page1">
+        <div class="question-card" id="q1">
+          <span class="question-text">1. Select the primary function of a CPU:</span>
+          <label><input type="radio" name="q1" onchange="mark(1)"> Processing Data</label><br><br>
+          <label><input type="radio" name="q1" onchange="mark(1)"> Storing Files</label>
+        </div>
+
+        <div class="question-card" id="q2">
+          <span class="question-text">2. Which is a High-Level Language?</span>
+          <label><input type="radio" name="q2" onchange="mark(2)"> Python</label><br><br>
+          <label><input type="radio" name="q2" onchange="mark(2)"> Assembly</label>
+        </div>
+
+        <div class="question-card" id="q3">
+          <span class="question-text">3. Is HTTP a secure protocol?</span>
+          <label><input type="radio" name="q3" onchange="mark(3)"> Yes</label><br><br>
+          <label><input type="radio" name="q3" onchange="mark(3)"> No, HTTPS is</label>
+        </div>
+
+        <div class="question-card" id="q4">
+          <span class="question-text">4. RAM is volatile memory.</span>
+          <label><input type="radio" name="q4" onchange="mark(4)"> True</label><br><br>
+          <label><input type="radio" name="q4" onchange="mark(4)"> False</label>
+        </div>
+
+        <div class="question-card" id="q5">
+          <span class="question-text">5. What does SQL stand for?</span>
+          <label><input type="radio" name="q5" onchange="mark(5)"> Structured Query Language</label><br><br>
+          <label><input type="radio" name="q5" onchange="mark(5)"> Simple Queue List</label>
+        </div>
+      </div>
+
+      <div id="page2" class="hidden">
+        <div class="question-card" id="q6">
+          <span class="question-text">6. Result of (10 + 5) * 2:</span>
+          <input type="text" oninput="mark(6)">
+        </div>
+
+        <div class="question-card" id="q7">
+          <span class="question-text">7. Number of bits in an IPv4 address?</span>
+          <input type="text" oninput="mark(7)">
+        </div>
+
+        <div class="question-card" id="q8">
+          <span class="question-text">8. Capital of the Internet (Metaphorical)?</span>
+          <input type="text" oninput="mark(8)">
+        </div>
+
+        <div class="question-card" id="q9">
+          <span class="question-text">9 & 10. Categorize the components into the Tree:</span>
+          <div class="tree-container">
+            <div class="tree-root">Computer System</div>
+            <div class="tree-branches">
+              <div class="branch" id="branch-hw" ondrop="drop(event, 9)" ondragover="allow(event)">
+                <span class="branch-label">Hardware</span>
+              </div>
+              <div class="branch" id="branch-sw" ondrop="drop(event, 10)" ondragover="allow(event)">
+                <span class="branch-label">Software</span>
+              </div>
+            </div>
+            <div class="items-bank">
+              <div class="drag-item" draggable="true" id="it1" ondragstart="drag(event)">Mouse</div>
+              <div class="drag-item" draggable="true" id="it2" ondragstart="drag(event)">Linux</div>
+              <div class="drag-item" draggable="true" id="it3" ondragstart="drag(event)">Monitor</div>
+              <div class="drag-item" draggable="true" id="it4" ondragstart="drag(event)">Office 365</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button id="prevBtn" class="btn hidden" onclick="changePage(1)">Back</button>
+        <button id="nextBtn" class="btn btn-blue" onclick="changePage(2)">Next Page</button>
+        <button id="finishBtn" class="btn btn-blue hidden" onclick="showConfirmation()">Finish Attempt</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h3>Quiz Navigation</h3>
+      <div class="quiz-nav-grid" id="navGrid">
+        </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <h2>Finish Attempt?</h2>
+      <p>Summary of attempt:</p>
+      <p id="summaryText"></p>
+      <button class="btn btn-blue" onclick="location.href='dashboard.html'">Submit All and Finish</button>
+      <button class="btn" style="background:#eee" onclick="closeModal()">Return to Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    // Build Navigation Grid
+    const navGrid = document.getElementById('navGrid');
+    for(let i=1; i<=10; i++) {
+      const a = document.createElement('a');
+      a.className = 'nav-box';
+      a.id = 'nav-' + i;
+      a.innerText = i;
+      a.onclick = () => jumpToQuestion(i);
+      navGrid.appendChild(a);
+    }
+
+    function jumpToQuestion(n) {
+      if (n <= 5) changePage(1); else changePage(2);
+      setTimeout(() => {
+        document.getElementById('q' + n).scrollIntoView();
+      }, 50);
+    }
+
+    function changePage(p) {
+      if(p === 1) {
+        document.getElementById('page1').classList.remove('hidden');
+        document.getElementById('page2').classList.add('hidden');
+        document.getElementById('nextBtn').classList.remove('hidden');
+        document.getElementById('prevBtn').classList.add('hidden');
+        document.getElementById('finishBtn').classList.add('hidden');
+      } else {
+        document.getElementById('page1').classList.add('hidden');
+        document.getElementById('page2').classList.remove('hidden');
+        document.getElementById('nextBtn').classList.add('hidden');
+        document.getElementById('prevBtn').classList.remove('hidden');
+        document.getElementById('finishBtn').classList.remove('hidden');
+      }
+    }
+
+    function mark(n) { document.getElementById('nav-' + n).classList.add('answered'); }
+
+    // Drag Logic
+    function allow(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev, q) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.getElementById(data));
+      mark(q);
+    }
+
+    // Modal Logic
+    function showConfirmation() {
+      const answered = document.querySelectorAll('.nav-box.answered').length;
+      document.getElementById('summaryText').innerText = `${answered} out of 10 questions answered.`;
+      document.getElementById('confirmModal').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('confirmModal').style.display = 'none'; }
+  </script>
+</body>
+</html>

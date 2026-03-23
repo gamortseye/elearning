@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Page</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6f8;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .nav-links a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .circle {
+      background: #e5e7eb;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: flex;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background: #f9fafb;
+      border-right: 1px solid #ddd;
+      height: calc(100vh - 50px);
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .sidebar h4 {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 8px;
+      font-size: 13px;
+      color: #333;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .sidebar a.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    .sidebar a:hover {
+      background: #e5e7eb;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      padding: 20px 30px;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      background: #f472b6;
+      color: white;
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
+
+    .tabs span {
+      padding: 10px 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .tabs .active {
+      border-bottom: 2px solid #2563eb;
+      color: #2563eb;
+    }
+
+    /* CARD */
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .btn.cancel {
+      background: #6b7280;
+      margin-left: 10px;
+    }
+
+    .info {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .muted {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .center {
+      text-align: center;
+      margin-top: 20px;
+      color: #2563eb;
+    }
+
+    /* MODAL STYLES */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      width: 450px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .close-btn {
+      cursor: pointer;
+      font-size: 20px;
+      color: #888;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-body h4 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+
+    .modal-body p {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+      background: #f9fafb;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Dashboard</a>
+      <a href="#">My courses</a>
+      <a href="#">Courses</a>
+    </div>
+
+    <div class="nav-right">
+      🔔 💬
+      <div class="circle">EG</div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <h4>General Information Centre</h4>
+      <a href="#">Questions from Students</a>
+      <a href="#">Final Lecture Notes</a>
+
+      <h4>Assignment, Quizzes and Exams</h4>
+      <a href="#">A-Frame Individual</a>
+      <a href="#" class="active">Interim Assessment (IA) - 01</a>
+      <a href="#">Interim Assessment (IA) - 02</a>
+
+      <h4>Lectures</h4>
+      <a href="#">Lecture 01</a>
+      <a href="#">Lecture 02</a>
+      <a href="#">Lecture 03</a>
+    </div>
+
+    <div class="main">
+
+      <div class="breadcrumb">CSC413 / Interim Assessment (IA) - 01</div>
+
+      <div class="title">
+        <div class="badge">📄</div>
+        Interim Assessment (IA) - 01
+      </div>
+
+      <div class="tabs">
+        <span class="active" onclick="switchTab('quiz')">Quiz</span>
+        <span onclick="switchTab('results')">Results</span>
+        <span onclick="switchTab('more')">More</span>
+      </div>
+
+      <div id="quiz" class="card tab-content">
+        <button class="btn secondary">Mark as done</button>
+
+        <div class="info">
+          <b>Opened:</b> Thursday, 11 December 2025, 9:25 AM <br>
+          <b>Closed:</b> Thursday, 11 December 2025, 10:30 AM
+        </div>
+
+        <br>
+
+        <button class="btn" onclick="openModal()">Preview quiz</button>
+
+        <div class="info">
+          Attempts allowed: 1 <br><br>
+          To attempt this quiz you need to know the quiz password <br><br>
+          Time limit: 50 mins
+        </div>
+
+        <div class="center">Attempts: 204</div>
+
+        <p class="muted">This quiz is currently not available.</p>
+      </div>
+
+      <div id="results" class="card tab-content" style="display:none;">
+        <p>No results available yet.</p>
+      </div>
+
+      <div id="more" class="card tab-content" style="display:none;">
+        <p>More options coming soon...</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="quizModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Start attempt</h3>
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <h4>Password</h4>
+        <p>To attempt this quiz you need to know the quiz password</p>
+        <label style="font-size: 12px; font-weight: bold;">Quiz password</label>
+        <input type="password" class="password-input" placeholder="Click to enter text">
+        
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        
+        <h4>Time limit</h4>
+        <p>Your attempt will have a time limit of 50 mins. When you start, the timer will begin to count down and cannot be paused. You must finish your attempt before it expires. Are you sure you wish to start now?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="startQuiz()">Start attempt</button>
+        <button class="btn cancel" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.style.display = 'none';
+      });
+      document.getElementById(tabId).style.display = 'block';
+      document.querySelectorAll('.tabs span').forEach(el => {
+        el.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    function openModal() {
+      document.getElementById('quizModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('quizModal').style.display = 'none';
+    }
+
+    // Function to navigate to quiz.html
+    function startQuiz() {
+      window.location.href = 'Quiz.html';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('quizModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+  </script>
+
+</body>
+
+</html>
