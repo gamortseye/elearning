@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Results - CSC413</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --success: #059669;
+      --danger: #ef4444;
+      --bg: #f3f4f6;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: white;
+      width: 100%;
+      padding: 15px 30px;
+      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+      color: #1e3a8a;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Results Container */
+    .results-container {
+      background: white;
+      width: 100%;
+      max-width: 800px;
+      margin-top: 40px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    .page-title {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #f3f4f6;
+      padding-bottom: 10px;
+    }
+
+    /* Summary Table */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    .summary-table th, .summary-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .summary-table th {
+      background-color: #f9fafb;
+      color: #555;
+      font-weight: 600;
+      width: 30%;
+    }
+
+    .summary-table td {
+      color: #333;
+    }
+
+    .grade-highlight {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary);
+      background: #eff6ff;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1e40af; }
+    
+    .btn-secondary { background: #e5e7eb; color: #333; }
+    .btn-secondary:hover { background: #d1d5db; }
+
+    /* Score Circle */
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 8px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--success);
+      margin: 0 auto 30px auto;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <span>CSC413 - Interim Assessment (IA) - 01</span>
+    <span>EG</span>
+  </div>
+
+  <div class="results-container">
+    <div class="page-title">Summary of your previous attempts</div>
+
+    <div class="score-circle" id="finalScore">
+      8 / 10
+    </div>
+
+    <table class="summary-table">
+      <tr>
+        <th>State</th>
+        <td>Finished</td>
+      </tr>
+      <tr>
+        <th>Submitted on</th>
+        <td id="submitDate">Loading...</td>
+      </tr>
+      <tr>
+        <th>Time taken</th>
+        <td>15 mins 23 secs</td>
+      </tr>
+      <tr>
+        <th>Grade</th>
+        <td><span class="grade-highlight">8.00</span> out of 10.00 (80%)</td>
+      </tr>
+      <tr>
+        <th>Feedback</th>
+        <td style="color: var(--success); font-weight: bold;">Excellent work! You have passed the assessment.</td>
+      </tr>
+    </table>
+
+    <div class="btn-group">
+      <a href="index.html" class="btn btn-primary">Back to Course</a>
+      <a href="#" class="btn btn-secondary">Review Attempt</a>
+    </div>
+  </div>
+
+  <script>
+    // Automatically set today's date and time for realism
+    const dateElement = document.getElementById('submitDate');
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    dateElement.innerText = now.toLocaleDateString('en-US', options);
+  </script>
+
+</body>
+</html>
